@@ -25,7 +25,8 @@ BETS = {
     "Haití vs Escocia":                ["0-3","0-2","0-1","0-2","0-2","0-1","0-2","0-2"],
     "Australia vs Turquía":            ["1-2","1-2","1-2","0-3","1-1","1-2","1-2","0-1"],
     "Alemania vs Curazao":             ["5-0","3-0","3-0","5-0","4-0","4-0","2-0","4-0"],
-    # Próximos partidos — se agregan cuando pollamundialera registre los pronósticos
+    "Países Bajos vs Japón":           ["2-1","2-0","2-1","1-1","2-1","2-1","1-1","2-1"],
+    "Costa de Marfil vs Ecuador":      ["—","—","—","—","—","—","—","—"],
 }
 
 # Normalización de nombres FIFA → nombres usados en display
@@ -66,19 +67,19 @@ def calc_pts(result, bet):
         return 1
     return 0
 
-def normalize(name):
-    return FIFA_NAME_MAP.get(name, name)
-
 def find_bets(home, away):
-    # Intentar match directo
-    for key, v in BETS.items():
-        kh, ka = key.split(" vs ")
-        h, a = normalize(home), normalize(away)
-        if (kh.lower() in h.lower() or h.lower() in kh.lower()) and \
-           (ka.lower() in a.lower() or a.lower() in ka.lower()):
+    # Match directo
+    key = f"{home} vs {away}"
+    if key in BETS:
+        return BETS[key]
+    # Match por primeras 5 letras de cada equipo
+    for k, v in BETS.items():
+        kh, ka = k.split(" vs ")
+        if kh[:5].lower() == home[:5].lower() and ka[:5].lower() == away[:5].lower():
             return v
-        # Match por primeras 4 letras
-        if kh[:4].lower() == h[:4].lower() and ka[:4].lower() == a[:4].lower():
+        # Match por subcadena
+        if (kh.lower() in home.lower() or home.lower() in kh.lower()) and \
+           (ka.lower() in away.lower() or away.lower() in ka.lower()):
             return v
     return ["—"] * len(PLAYERS)
 
