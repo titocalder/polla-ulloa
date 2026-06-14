@@ -1,251 +1,193 @@
 #!/usr/bin/env python3
 """
-Scraper para pollamundialera.com/ranking/5129
-Genera index.html con ranking + partidos + apuestas.
+Scraper FIFA -> genera index.html para La Polla de Ulloa.
+Usa Playwright para renderizar la página de FIFA (JS-heavy).
 """
-import asyncio
-import json
-import re
-import sys
+import asyncio, json, re, sys
 from datetime import datetime
 from playwright.async_api import async_playwright
 
-POLLA_ID = "5129"
-BASE_URL = "https://www.pollamundialera.com"
-RANKING_URL = f"{BASE_URL}/ranking/{POLLA_ID}"
-PRONOSTICOS_URL = f"{BASE_URL}/pronosticos/{POLLA_ID}"
+FIFA_URL = "https://www.fifa.com/es/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures?country=CL&wtw-filter=ALL"
 
-# Jugadores en orden (como aparece en la tabla de pronósticos)
-# Si el orden cambia en el sitio, se actualiza aquí.
-YOU = "Héctor Calderon"
+# Apuestas de cada jugador por partido (orden fijo)
+PLAYERS = ["I.Bastías","N.Zarges","K.Sepúlveda","I.Ulloa","D.Mediano","H.Calderon","🌸 A.Fernandez","R.Lamas"]
+YOU = "H.Calderon"
 
-MONTHS_ES = {
-    "Jan":"Ene","Feb":"Feb","Mar":"Mar","Apr":"Abr","May":"May","Jun":"Jun",
-    "Jul":"Jul","Aug":"Ago","Sep":"Sep","Oct":"Oct","Nov":"Nov","Dec":"Dic",
+BETS = {
+    "México vs Sudáfrica":            ["2-0","2-0","2-0","2-1","2-0","2-1","2-0","1-0"],
+    "República de Corea vs Chequia":  ["2-1","1-1","1-1","0-2","1-1","1-0","1-1","1-1"],
+    "Canadá vs Bosnia y Herzegovina": ["2-1","1-1","2-1","2-1","2-1","2-1","1-0","1-0"],
+    "EE. UU. vs Paraguay":            ["2-1","0-1","1-0","0-1","2-0","1-2","1-1","2-1"],
+    "Catar vs Suiza":                 ["0-3","0-2","0-2","0-3","0-2","—","0-2","0-2"],
+    "Brasil vs Marruecos":            ["2-1","2-1","2-1","1-1","2-0","3-1","1-0","2-1"],
+    "Haití vs Escocia":               ["0-3","0-2","0-1","0-2","0-2","0-1","0-2","0-2"],
+    "Australia vs Turquía":           ["1-2","1-2","1-2","0-3","1-1","1-2","1-2","0-1"],
+    "Alemania vs Curazao":            ["5-0","3-0","3-0","5-0","4-0","4-0","2-0","4-0"],
+}
+
+DATE_MAP = {
+    "jueves":"Jue","viernes":"Vie","sábado":"Sáb","domingo":"Dom",
+    "lunes":"Lun","martes":"Mar","miércoles":"Mié",
     "enero":"Ene","febrero":"Feb","marzo":"Mar","abril":"Abr","mayo":"May",
     "junio":"Jun","julio":"Jul","agosto":"Ago","septiembre":"Sep",
     "octubre":"Oct","noviembre":"Nov","diciembre":"Dic",
 }
 
-def fmt_date(s):
-    """Intenta formatear una fecha corta."""
-    s = s.strip()
-    for en, es in MONTHS_ES.items():
-        s = s.replace(en, es)
-    # Deja solo día y mes
+def short_date(s):
+    s = s.lower()
+    for k,v in DATE_MAP.items():
+        s = s.replace(k, v)
     m = re.search(r'(\d{1,2})\s+(\w+)', s)
-    if m:
-        return f"{m.group(1)} {m.group(2)[:3]}"
-    return s
+    return f"{m.group(1)} {m.group(2)[:3].capitalize()}" if m else s
 
+def calc_pts(result, bet):
+    if not result or not bet or bet == "—":
+        return None  # pendiente
+    try:
+        rh, ra = map(int, result.split("-"))
+        bh, ba = map(int, bet.split("-"))
+    except:
+        return None
+    if rh == bh and ra == ba:
+        return 3
+    if (rh > ra and bh > ba) or (rh < ra and bh < ba) or (rh == ra and bh == ba):
+        return 1
+    return 0
 
-async def scrape():
+def find_bets(home, away):
+    key = f"{home} vs {away}"
+    if key in BETS:
+        return BETS[key]
+    # Buscar parcial
+    for k, v in BETS.items():
+        kh, ka = k.split(" vs ")
+        if kh[:4].lower() in home.lower() or home.lower()[:4] in kh.lower():
+            if ka[:4].lower() in away.lower() or away.lower()[:4] in ka.lower():
+                return v
+    return ["—"] * len(PLAYERS)
+
+async def scrape_fifa():
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(args=["--no-sandbox"])
-        ctx = await browser.new_context(
-            locale="es-CL",
-            user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
-        )
-        page = await ctx.new_page()
-
-        # ── RANKING ────────────────────────────────────────────────────────
-        print(f"Cargando {RANKING_URL}", flush=True)
-        await page.goto(RANKING_URL, wait_until="networkidle", timeout=60000)
+        page = await browser.new_page(locale="es-ES")
+        print(f"Cargando FIFA...", flush=True)
+        await page.goto(FIFA_URL, wait_until="networkidle", timeout=60000)
         await page.wait_for_timeout(4000)
+        # Refrescar para obtener datos actualizados
+        await page.reload(wait_until="networkidle", timeout=60000)
+        await page.wait_for_timeout(3000)
 
-        ranking = []
-        # Intentamos distintos selectores comunes
-        rows = await page.query_selector_all("table tr")
-        for row in rows:
-            cells = await row.query_selector_all("td")
-            if len(cells) >= 2:
-                texts = [await c.inner_text() for c in cells]
-                # Busca filas con nombre + puntos
-                pts_match = None
-                name = None
-                for t in texts:
-                    t = t.strip()
-                    pm = re.search(r'\b(\d+)\s*(pts?|puntos?|p\.?)\b', t, re.IGNORECASE)
-                    if pm:
-                        pts_match = int(pm.group(1))
-                    elif t and not re.match(r'^\d+$', t) and len(t) > 2:
-                        name = t
-                if name and pts_match is not None:
-                    ranking.append({"name": name, "pts": pts_match})
-
-        # Fallback: buscar divs/li con puntos
-        if not ranking:
-            items = await page.query_selector_all("[class*='rank'], [class*='posicion'], [class*='jugador'], li")
-            for el in items:
-                text = (await el.inner_text()).strip()
-                pm = re.search(r'(.+?)\s+(\d+)\s*(pts?|puntos?|p\.?)', text, re.IGNORECASE)
-                if pm:
-                    ranking.append({"name": pm.group(1).strip(), "pts": int(pm.group(2))})
-
-        print(f"  → {len(ranking)} jugadores en ranking", flush=True)
-
-        # ── PRONÓSTICOS ───────────────────────────────────────────────────
-        print(f"Cargando {PRONOSTICOS_URL}", flush=True)
-        await page.goto(PRONOSTICOS_URL, wait_until="networkidle", timeout=60000)
-        await page.wait_for_timeout(4000)
-
-        matches = []
-        # Buscar tabla principal de pronósticos
-        tables = await page.query_selector_all("table")
-        for tbl in tables:
-            headers = await tbl.query_selector_all("th")
-            h_texts = [await h.inner_text() for h in headers]
-            # Tiene columnas de jugadores?
-            if len(h_texts) >= 4:
-                players = [t.strip() for t in h_texts if t.strip() and
-                           t.strip().lower() not in ("partido","fecha","resultado","res","match","goles","score")]
-                rows = await tbl.query_selector_all("tr")
-                for row in rows[1:]:
-                    cells = await row.query_selector_all("td")
-                    if len(cells) < 3:
-                        continue
-                    texts = [await c.inner_text() for c in cells]
-                    # Primer cell: partido (equipos)
-                    match_text = texts[0].strip()
-                    result_text = ""
-                    bets = []
-                    pts_list = []
-                    # Busca resultado (e.g. "2-1")
-                    for t in texts[1:3]:
-                        if re.search(r'\d+\s*[-–]\s*\d+', t):
-                            result_text = re.search(r'\d+\s*[-–]\s*\d+', t).group().replace("–","-")
-                            break
-                    # Resto son apuestas
-                    for t in texts:
-                        bm = re.search(r'(\d+)\s*[-–]\s*(\d+)', t)
-                        if bm and t != result_text:
-                            bets.append(bm.group().replace("–","-"))
-
-                    # Equipos
-                    teams = re.split(r'\s+vs\.?\s+|\s+-\s+', match_text, flags=re.IGNORECASE)
-                    home = teams[0].strip() if teams else match_text
-                    away = teams[1].strip() if len(teams) > 1 else ""
-
-                    if home and result_text:
-                        # Calcular puntos
-                        for bet in bets:
-                            if bet == result_text:
-                                pts_list.append(3)
-                            elif result_text and bet:
-                                rh, ra = map(int, result_text.split("-"))
-                                bh, ba = map(int, bet.split("-"))
-                                if (rh > ra and bh > ba) or (rh < ra and bh < ba) or (rh == ra and bh == ba):
-                                    pts_list.append(1)
-                                else:
-                                    pts_list.append(0)
-                            else:
-                                pts_list.append(0)
-
-                        matches.append({
-                            "date": "",
-                            "home": home,
-                            "away": away,
-                            "result": result_text,
-                            "players": players,
-                            "bets": bets,
-                            "pts": pts_list,
-                        })
-
-        print(f"  → {len(matches)} partidos encontrados", flush=True)
-
-        # Guarda datos crudos para debugging
-        with open("scraped_data.json", "w", encoding="utf-8") as f:
-            json.dump({"ranking": ranking, "matches": matches}, f, ensure_ascii=False, indent=2)
-
+        full = await page.evaluate("document.body.innerText")
         await browser.close()
-        return ranking, matches
 
+    lines = [l.strip() for l in full.split('\n') if l.strip()]
+    matches = []
+    for i in range(len(lines) - 5):
+        is_result = bool(re.search(r'FINAL|SUSP|EN CURSO|\d+\'', lines[i+2]))
+        is_future = bool(re.match(r'^\d{2}:\d{2}$', lines[i+2]))
+        if (is_result or is_future) and re.match(r'^\d+$', lines[i+1]) and re.match(r'^\d+$', lines[i+3]):
+            date = ""
+            for j in range(i, -1, -1):
+                if re.search(r'\d{4}', lines[j]) and len(lines[j]) > 8:
+                    date = lines[j]; break
+            group = ""
+            for k in range(i+5, min(i+10, len(lines))):
+                if "Grupo" in lines[k]:
+                    group = lines[k]; break
+            home, away = lines[i], lines[i+4]
+            hs, as_ = lines[i+1], lines[i+3]
+            status = lines[i+2]
+            result = f"{hs}-{as_}" if is_result else ""
+            bets = find_bets(home, away)
+            pts = [calc_pts(result, b) for b in bets]
+            matches.append({
+                "date": short_date(date),
+                "home": home, "away": away,
+                "result": result, "status": status,
+                "group": group, "bets": bets, "pts": pts
+            })
 
-def pts_badge(p, bet):
-    if bet in ("—", "", None):
-        return '<span style="color:#b4b2a9;">—</span>'
-    if p == 3:
-        return '<span class="badge b-exact">3</span>'
-    if p == 1:
-        return '<span class="badge b-ok">1</span>'
-    return '<span class="badge b-zero">0</span>'
+    print(f"  → {len(matches)} partidos", flush=True)
+    return matches
 
-
-def generate_html(ranking, matches):
-    now = datetime.now().strftime("%-d %b %H:%M")
-
-    # Ranking HTML
-    max_pts = ranking[0]["pts"] if ranking else 1
-    rank_rows_html = ""
-    pos = 0
-    prev_pts = None
-    for i, p in enumerate(ranking):
-        if p["pts"] != prev_pts:
+def ranking(matches):
+    totals = {p: 0 for p in PLAYERS}
+    for m in matches:
+        for i, p in enumerate(PLAYERS):
+            v = m["pts"][i]
+            if v is not None:
+                totals[p] += v
+    sorted_players = sorted(totals.items(), key=lambda x: -x[1])
+    result = []
+    pos, prev = 0, None
+    for i, (name, pts) in enumerate(sorted_players):
+        if pts != prev:
             pos = i + 1
-            prev_pts = p["pts"]
-        pct = round(p["pts"] / max_pts * 100, 1) if max_pts else 0
-        is_you = YOU in p["name"]
-        row_cls = "rank-row you-row" if is_you else "rank-row"
-        if pos == 1:
-            num_color = "#B8860B"
-            badge_cls = "b-gold"
-        elif pos == 2:
-            num_color = "#888"
-            badge_cls = "b-silver"
-        else:
-            num_color = "#888"
-            badge_cls = "b-gray"
-        bar_color = "#85B7EB" if is_you else ("#9FE1CB" if pos == 1 else "#C0DD97" if pos == 2 else "#D3D1C7")
-        name_html = p["name"] + (' <span style="font-size:10px;background:#B5D4F4;color:#0C447C;padding:1px 6px;border-radius:4px;margin-left:4px;">tú</span>' if is_you else "")
-        rank_rows_html += f"""
+            prev = pts
+        result.append({"name": name, "pts": pts, "pos": pos})
+    return result
+
+def pts_label(p):
+    if p is None: return ("pp", "?")
+    if p == 3: return ("pe", "+3 pts")
+    if p == 1: return ("po", "+1 pt")
+    return ("pz", "0 pts")
+
+def generate_html(matches):
+    now = datetime.now().strftime("%-d %b %H:%M")
+    rank = ranking(matches)
+    max_pts = rank[0]["pts"] if rank else 1
+
+    # ── Ranking HTML ──
+    rank_html = ""
+    for r in rank:
+        pct = round(r["pts"] / max_pts * 100) if max_pts else 0
+        is_you = YOU in r["name"]
+        row_cls = "rrow you-row" if is_you else "rrow"
+        num_color = "#B8860B" if r["pos"]==1 else "#888"
+        badge_cls = "bg" if r["pos"]==1 else "bs" if r["pos"]==2 else "bx"
+        bar_color = "#85B7EB" if is_you else "#9FE1CB" if r["pos"]==1 else "#C0DD97" if r["pos"]==2 else "#D3D1C7"
+        you_tag = ' <span style="font-size:10px;background:#B5D4F4;color:#0C447C;padding:1px 6px;border-radius:4px;margin-left:4px">tú</span>' if is_you else ""
+        name_style = "color:#185FA5;" if is_you else ""
+        rank_html += f"""
     <div class="{row_cls}">
-      <span class="rank-num" style="color:{num_color};">{pos}</span>
-      <span style="flex:1;font-weight:500;{'color:#185FA5;' if is_you else ''}">{name_html}</span>
-      <span style="font-size:13px;color:#888780;margin-right:8px;">{p['pts']} pts</span>
-      <div class="bar-wrap"><div class="bar" style="width:{pct}%;background:{bar_color};"></div></div>
-      <span class="badge {badge_cls}">{pos}°</span>
+      <span class="rnum" style="color:{num_color}">{r["pos"]}</span>
+      <span style="flex:1;font-weight:500;{name_style}">{r["name"]}{you_tag}</span>
+      <span style="font-size:13px;color:#888780;margin-right:8px">{r["pts"]} pts</span>
+      <div class="bar-w"><div class="bar" style="width:{pct}%;background:{bar_color}"></div></div>
+      <span class="badge {badge_cls}">{r["pos"]}°</span>
     </div>"""
 
-    # Match más actual
-    last_match_html = ""
-    if matches:
-        lm = matches[-1]
-        players = lm.get("players", [])
-        bets = lm.get("bets", [])
-        pts = lm.get("pts", [])
+    # ── Último partido HTML ──
+    last = next((m for m in reversed(matches) if m["result"]), None) or (matches[-1] if matches else None)
+    hero_html = ""
+    if last:
+        score_disp = last["result"].replace("-"," – ") if last["result"] else "? – ?"
         chips = ""
-        for j, player in enumerate(players):
-            bet = bets[j] if j < len(bets) else "—"
-            p_val = pts[j] if j < len(pts) else 0
-            is_you_chip = YOU in player
-            chip_cls = "bet-chip you" if is_you_chip else "bet-chip"
-            pts_cls = "pts-exact" if p_val == 3 else "pts-ok" if p_val == 1 else "pts-zero" if lm["result"] else "pts-pending"
-            pts_label = f"+{p_val} pt" if lm["result"] else "pendiente"
+        for j, pl in enumerate(PLAYERS):
+            bet = last["bets"][j]
+            p = last["pts"][j]
+            cls, lbl = pts_label(p)
+            is_you = YOU in pl
+            chip_cls = "chip you" if is_you else "chip"
             chips += f"""
-      <div class="{chip_cls}">
-        <span class="name">{player}</span>
-        <span class="apuesta">{bet}</span>
-        <span class="pts-chip {pts_cls}">{pts_label}</span>
-      </div>"""
-        last_match_html = f"""
-  <div class="match-hero">
-    <div class="match-tag"><span class="live-dot"></span> Match más actual</div>
-    <div class="match-title">{lm['home']} vs {lm['away']}</div>
-    <div class="match-meta">{lm.get('date','')}</div>
-    <div class="score-big">{lm['result'].replace('-',' – ') if lm['result'] else '? – ?'}</div>
-    <div class="score-label">{'Resultado final' if lm['result'] else 'En curso / pendiente'}</div>
-    <div class="bets-grid">{chips}
+      <div class="{chip_cls}"><span class="cn">{pl}</span><span class="ca">{bet}</span><span class="cp {cls}">{lbl}</span></div>"""
+        hero_html = f"""
+  <div class="hero">
+    <div class="hero-tag"><span class="dot"></span>Último partido</div>
+    <div class="hero-title">{last["home"]} vs {last["away"]}</div>
+    <div class="hero-meta">{last["date"]} · {last["group"]}</div>
+    <div class="score">{score_disp}</div>
+    <div class="score-lbl">Resultado final</div>
+    <div class="chips">{chips}
     </div>
   </div>"""
 
-    # Historial HTML
-    players_header = ""
-    if matches:
-        for pl in matches[0].get("players", []):
-            is_you = YOU in pl
-            players_header += f'<th>{"★ " if is_you else ""}{pl}</th>'
+    # ── Table headers ──
+    headers = "".join(f"<th>{'★ ' if YOU in p else ''}{p}</th>" for p in PLAYERS)
 
-    match_rows_js = json.dumps(matches, ensure_ascii=False)
+    # ── Matches JS ──
+    matches_js = json.dumps(matches, ensure_ascii=False)
 
     return f"""<!DOCTYPE html>
 <html lang="es">
@@ -254,141 +196,119 @@ def generate_html(ranking, matches):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>La Polla de Ulloa — Mundial 2026</title>
 <style>
-* {{ box-sizing: border-box; margin: 0; padding: 0; }}
-body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f2; color: #1a1a18; padding: 1.5rem 1rem; max-width: 960px; margin: 0 auto; }}
-h1 {{ font-size: 20px; font-weight: 600; margin-bottom: 0.15rem; }}
-.subtitle {{ font-size: 13px; color: #888780; margin-bottom: 1.25rem; }}
-.tabs {{ display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }}
-.tab {{ padding: 7px 16px; border: 0.5px solid #b4b2a9; border-radius: 8px; font-size: 13px; cursor: pointer; background: transparent; color: #5f5e5a; font-family: inherit; }}
-.tab.active {{ background: #1a1a18; color: #fff; font-weight: 500; border-color: #1a1a18; }}
-.section {{ display: none; }}
-.section.active {{ display: block; }}
-.match-hero {{ background: #fff; border: 2px solid #85B7EB; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }}
-.match-tag {{ font-size: 11px; font-weight: 600; color: #185FA5; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px; margin-bottom: 0.6rem; }}
-.live-dot {{ width: 7px; height: 7px; border-radius: 50%; background: #27B07C; }}
-.match-title {{ font-size: 17px; font-weight: 700; margin-bottom: 0.3rem; }}
-.match-meta {{ font-size: 12px; color: #888780; margin-bottom: 1rem; }}
-.score-big {{ font-size: 32px; font-weight: 700; color: #185FA5; margin-bottom: 0.25rem; }}
-.score-label {{ font-size: 11px; color: #888780; margin-bottom: 1.25rem; }}
-.bets-grid {{ display: flex; flex-wrap: wrap; gap: 8px; }}
-.bet-chip {{ display: flex; flex-direction: column; align-items: center; background: #f1efe8; border-radius: 10px; padding: 8px 12px; min-width: 80px; flex: 1; }}
-.bet-chip.you {{ background: #EBF4FD; border: 1.5px solid #85B7EB; }}
-.bet-chip .name {{ font-size: 10px; color: #888780; margin-bottom: 3px; white-space: nowrap; }}
-.bet-chip.you .name {{ color: #185FA5; }}
-.bet-chip .apuesta {{ font-size: 15px; font-weight: 700; }}
-.bet-chip.you .apuesta {{ color: #185FA5; }}
-.bet-chip .pts-chip {{ margin-top: 4px; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 999px; }}
-.pts-exact {{ background: #9FE1CB; color: #085041; }}
-.pts-ok    {{ background: #C0DD97; color: #27500A; }}
-.pts-zero  {{ background: #F1EFE8; color: #5F5E5A; }}
-.pts-pending {{ background: #B5D4F4; color: #0C447C; }}
-.rank-rows {{ display: flex; flex-direction: column; gap: 8px; }}
-.rank-row {{ display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; }}
-.rank-num {{ font-size: 18px; font-weight: 600; width: 28px; text-align: center; }}
-.bar-wrap {{ flex: 1; background: #f1efe8; border-radius: 4px; height: 9px; overflow: hidden; min-width: 50px; }}
-.bar {{ height: 100%; border-radius: 4px; }}
-.you-row {{ background: #EBF4FD !important; border: 1.5px solid #85B7EB !important; }}
-.badge {{ display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }}
-.b-gold   {{ background:#FAC775; color:#633806; }}
-.b-silver {{ background:#D3D1C7; color:#2C2C2A; }}
-.b-gray   {{ background:#F1EFE8; color:#5F5E5A; }}
-.b-exact  {{ background:#9FE1CB; color:#085041; }}
-.b-ok     {{ background:#C0DD97; color:#27500A; }}
-.b-zero   {{ background:#F1EFE8; color:#5F5E5A; }}
-.b-you    {{ background:#B5D4F4; color:#0C447C; }}
-.overflow {{ overflow-x: auto; }}
-table {{ width: 100%; border-collapse: collapse; font-size: 13px; }}
-th {{ font-weight: 500; font-size: 11px; color: #888780; padding: 8px 8px; text-align: center; border-bottom: 0.5px solid #e8e7e3; white-space: nowrap; }}
-th:first-child {{ text-align: left; }}
-td {{ padding: 7px 8px; border-bottom: 0.5px solid #e8e7e3; color: #1a1a18; vertical-align: middle; text-align: center; }}
-td:first-child {{ text-align: left; }}
-tr:last-child td {{ border-bottom: none; }}
-.res {{ display: inline-block; background: #f1efe8; border: 0.5px solid #b4b2a9; border-radius: 4px; padding: 1px 6px; font-size: 12px; font-weight: 500; }}
-.note {{ font-size: 12px; color: #b4b2a9; margin-top: 1rem; }}
-.legend {{ display: flex; gap: 12px; flex-wrap: wrap; margin-top: 1rem; font-size: 12px; color: #888780; align-items: center; }}
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f2;color:#1a1a18;padding:1.5rem 1rem;max-width:900px;margin:0 auto}}
+h1{{font-size:20px;font-weight:600;margin-bottom:.15rem}}
+.sub{{font-size:13px;color:#888780;margin-bottom:1.25rem}}
+.tabs{{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap}}
+.tab{{padding:7px 16px;border:.5px solid #b4b2a9;border-radius:8px;font-size:13px;cursor:pointer;background:transparent;color:#5f5e5a;font-family:inherit}}
+.tab.active{{background:#1a1a18;color:#fff;font-weight:500;border-color:#1a1a18}}
+.section{{display:none}}.section.active{{display:block}}
+.hero{{background:#fff;border:2px solid #85B7EB;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1rem}}
+.hero-tag{{font-size:11px;font-weight:600;color:#185FA5;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;margin-bottom:.6rem}}
+.dot{{width:7px;height:7px;border-radius:50%;background:#27B07C}}
+.hero-title{{font-size:18px;font-weight:700;margin-bottom:.2rem}}
+.hero-meta{{font-size:12px;color:#888780;margin-bottom:.9rem}}
+.score{{font-size:34px;font-weight:700;color:#185FA5;margin-bottom:.15rem}}
+.score-lbl{{font-size:11px;color:#888780;margin-bottom:1.1rem}}
+.chips{{display:flex;flex-wrap:wrap;gap:8px}}
+.chip{{display:flex;flex-direction:column;align-items:center;background:#f1efe8;border-radius:10px;padding:8px 12px;min-width:78px;flex:1}}
+.chip.you{{background:#EBF4FD;border:1.5px solid #85B7EB}}
+.chip .cn{{font-size:10px;color:#888780;margin-bottom:3px;white-space:nowrap}}
+.chip.you .cn{{color:#185FA5}}
+.chip .ca{{font-size:15px;font-weight:700}}
+.chip.you .ca{{color:#185FA5}}
+.chip .cp{{margin-top:4px;font-size:10px;font-weight:600;padding:1px 7px;border-radius:999px}}
+.pe{{background:#9FE1CB;color:#085041}}.po{{background:#C0DD97;color:#27500A}}
+.pz{{background:#F1EFE8;color:#5F5E5A}}.pp{{background:#B5D4F4;color:#0C447C}}
+.rrows{{display:flex;flex-direction:column;gap:8px}}
+.rrow{{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fff;border:.5px solid #d3d1c7;border-radius:12px}}
+.rnum{{font-size:18px;font-weight:600;width:28px;text-align:center}}
+.bar-w{{flex:1;background:#f1efe8;border-radius:4px;height:9px;overflow:hidden;min-width:50px}}
+.bar{{height:100%;border-radius:4px}}
+.you-row{{background:#EBF4FD!important;border:1.5px solid #85B7EB!important}}
+.badge{{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600}}
+.bg{{background:#FAC775;color:#633806}}.bs{{background:#D3D1C7;color:#2C2C2A}}
+.bx{{background:#F1EFE8;color:#5F5E5A}}.be{{background:#9FE1CB;color:#085041}}
+.bo{{background:#C0DD97;color:#27500A}}.bz{{background:#F1EFE8;color:#5F5E5A}}
+.by{{background:#B5D4F4;color:#0C447C}}
+.ov{{overflow-x:auto}}
+table{{width:100%;border-collapse:collapse;font-size:13px}}
+th{{font-weight:500;font-size:11px;color:#888780;padding:8px;text-align:center;border-bottom:.5px solid #e8e7e3;white-space:nowrap}}
+th:first-child{{text-align:left}}
+td{{padding:7px 8px;border-bottom:.5px solid #e8e7e3;color:#1a1a18;vertical-align:middle;text-align:center}}
+td:first-child{{text-align:left}}
+tr:last-child td{{border-bottom:none}}
+.res{{display:inline-block;background:#f1efe8;border:.5px solid #b4b2a9;border-radius:4px;padding:1px 6px;font-size:12px;font-weight:500}}
+.note{{font-size:12px;color:#b4b2a9;margin-top:1rem}}
+.leg{{display:flex;gap:12px;flex-wrap:wrap;margin-top:1rem;font-size:12px;color:#888780;align-items:center}}
 </style>
 </head>
 <body>
-
 <h1>⚽ La Polla de Ulloa</h1>
-<p class="subtitle">Copa Mundial 2026 · actualizado {now}</p>
-
+<p class="sub">Copa Mundial 2026 · actualizado {now}</p>
 <div class="tabs">
-  <button class="tab active" onclick="showTab('actual',this)">🔥 Match más actual</button>
-  <button class="tab" onclick="showTab('ranking',this)">🏆 Ranking</button>
-  <button class="tab" onclick="showTab('partidos',this)">📋 Historial</button>
+  <button class="tab active" onclick="show('actual',this)">🔥 Último partido</button>
+  <button class="tab" onclick="show('ranking',this)">🏆 Ranking</button>
+  <button class="tab" onclick="show('partidos',this)">📋 Historial</button>
 </div>
-
-<div id="actual" class="section active">
-{last_match_html}
-</div>
-
+<div id="actual" class="section active">{hero_html}</div>
 <div id="ranking" class="section">
-  <div class="rank-rows">
-{rank_rows_html}
+  <div class="rrows">{rank_html}
   </div>
-  <p class="note" style="margin-top:1rem;">Acierto exacto = 3 pts · ganador correcto = 1 pt</p>
+  <p class="note">Exacto = 3 pts · ganador correcto = 1 pt</p>
 </div>
-
 <div id="partidos" class="section">
-  <div class="overflow">
-  <table>
-    <thead>
-      <tr>
-        <th>Partido</th>
-        <th>Res.</th>
-        {players_header}
-      </tr>
-    </thead>
-    <tbody id="matchBody"></tbody>
-  </table>
-  </div>
-  <div class="legend">
-    <span><span class="badge b-exact">3</span> exacto</span>
-    <span><span class="badge b-ok">1</span> ganador ok</span>
-    <span><span class="badge b-zero">0</span> fallo</span>
-    <span style="color:#b4b2a9;">★ = tú</span>
+  <div class="ov"><table>
+    <thead><tr><th>Partido</th><th>Res.</th>{headers}</tr></thead>
+    <tbody id="tb"></tbody>
+  </table></div>
+  <div class="leg">
+    <span><span class="badge be">3</span> exacto</span>
+    <span><span class="badge bo">1</span> ganador ok</span>
+    <span><span class="badge bz">0</span> fallo</span>
+    <span style="color:#b4b2a9">★ = tú</span>
   </div>
 </div>
-
 <script>
-const matches = {match_rows_js};
-function cell(p, bet) {{
-  if (!bet || bet === '—') return '<td style="color:#b4b2a9;">—</td>';
-  const cls = p===3 ? 'b-exact' : p===1 ? 'b-ok' : 'b-zero';
-  return `<td><span class="badge ${{cls}}">${{p}}</span><div style="font-size:10px;color:#888780;margin-top:1px;">${{bet}}</div></td>`;
+const M={matches_js};
+function cell(p,b){{
+  if(p===null||!b||b==='—') return '<td style="color:#b4b2a9">—</td>';
+  const c=p===3?'be':p===1?'bo':'bz';
+  return `<td><span class="badge ${{c}}">${{p}}</span><div style="font-size:10px;color:#888780;margin-top:1px">${{b}}</div></td>`;
 }}
-const body = document.getElementById('matchBody');
-matches.forEach(m => {{
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td><span style="font-size:10px;color:#888780;">${{m.date}}</span><br><strong>${{m.home}}</strong> vs ${{m.away}}</td>
-    <td><span class="res">${{m.result || '—'}}</span></td>
-    ${{(m.bets||[]).map((b,i) => cell((m.pts||[])[i]||0, b)).join('')}}
-  `;
-  body.appendChild(tr);
+const tb=document.getElementById('tb');
+M.forEach(m=>{{
+  if(!m.result) return;
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><span style="font-size:10px;color:#888780">${{m.date}}</span><br><strong>${{m.home}}</strong> vs ${{m.away}}</td><td><span class="res">${{m.result}}</span></td>${{m.bets.map((b,i)=>cell(m.pts[i],b)).join('')}}`;
+  tb.appendChild(tr);
 }});
-function showTab(id, el) {{
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+function show(id,el){{
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   el.classList.add('active');
 }}
 </script>
 </body>
-</html>"""
-
+</html>""".replace("{matches_js}", matches_js)
 
 async def main():
-    ranking, matches = await scrape()
-    if not ranking and not matches:
-        print("ERROR: No se pudo extraer datos. Revisa scraped_data.json", file=sys.stderr)
+    matches = await scrape_fifa()
+    if not matches:
+        print("ERROR: no se encontraron partidos", file=sys.stderr)
         sys.exit(1)
-    html = generate_html(ranking, matches)
-    with open("index.html", "w", encoding="utf-8") as f:
+    with open("scraped_data.json","w",encoding="utf-8") as f:
+        json.dump(matches, f, ensure_ascii=False, indent=2)
+    html = generate_html(matches)
+    with open("index.html","w",encoding="utf-8") as f:
         f.write(html)
     print("✓ index.html generado", flush=True)
 
+    # Notificación de escritorio si hay partido próximo (≤15 min)
+    now = datetime.now()
+    # (se puede ampliar con hora real del partido cuando FIFA la exponga)
 
 if __name__ == "__main__":
     asyncio.run(main())
