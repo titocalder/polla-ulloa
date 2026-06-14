@@ -1,0 +1,282 @@
+[
+  {
+    "date": "11 Jun",
+    "home": "México",
+    "away": "Sudáfrica",
+    "result": "2-0",
+    "status": "FINAL",
+    "group": "Grupo A",
+    "bets": [
+      "2-0",
+      "2-0",
+      "2-0",
+      "2-1",
+      "2-0",
+      "2-1",
+      "2-0",
+      "1-0"
+    ],
+    "pts": [
+      3,
+      3,
+      3,
+      1,
+      3,
+      1,
+      3,
+      1
+    ]
+  },
+  {
+    "date": "12 Jun",
+    "home": "República de Corea",
+    "away": "Chequia",
+    "result": "2-1",
+    "status": "FINAL",
+    "group": "Grupo A",
+    "bets": [
+      "2-1",
+      "1-1",
+      "1-1",
+      "0-2",
+      "1-1",
+      "1-0",
+      "1-1",
+      "1-1"
+    ],
+    "pts": [
+      3,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "date": "12 Jun",
+    "home": "Canadá",
+    "away": "Bosnia y Herzegovina",
+    "result": "1-1",
+    "status": "FINAL",
+    "group": "Grupo B",
+    "bets": [
+      "2-1",
+      "1-1",
+      "2-1",
+      "2-1",
+      "2-1",
+      "2-1",
+      "1-0",
+      "1-0"
+    ],
+    "pts": [
+      0,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "date": "13 Jun",
+    "home": "EE. UU.",
+    "away": "Paraguay",
+    "result": "4-1",
+    "status": "FINAL",
+    "group": "Grupo D",
+    "bets": [
+      "2-1",
+      "0-1",
+      "1-0",
+      "0-1",
+      "2-0",
+      "1-2",
+      "1-1",
+      "2-1"
+    ],
+    "pts": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1
+    ]
+  },
+  {
+    "date": "13 Jun",
+    "home": "Catar",
+    "away": "Suiza",
+    "result": "1-1",
+    "status": "FINAL",
+    "group": "Grupo B",
+    "bets": [
+      "0-3",
+      "0-2",
+      "0-2",
+      "0-3",
+      "0-2",
+      "—",
+      "0-2",
+      "0-2"
+    ],
+    "pts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      null,
+      0,
+      0
+    ]
+  },
+  {
+    "date": "13 Jun",
+    "home": "Brasil",
+    "away": "Marruecos",
+    "result": "1-1",
+    "status": "FINAL",
+    "group": "Grupo C",
+    "bets": [
+      "2-1",
+      "2-1",
+      "2-1",
+      "1-1",
+      "2-0",
+      "3-1",
+      "1-0",
+      "2-1"
+    ],
+    "pts": [
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "date": "14 Jun",
+    "home": "Haití",
+    "away": "Escocia",
+    "result": "0-1",
+    "status": "FINAL",
+    "group": "Grupo C",
+    "bets": [
+      "0-3",
+      "0-2",
+      "0-1",
+      "0-2",
+      "0-2",
+      "0-1",
+      "0-2",
+      "0-2"
+    ],
+    "pts": [
+      1,
+      1,
+      3,
+      1,
+      1,
+      3,
+      1,
+      1
+    ]
+  },
+  {
+    "date": "14 Jun",
+    "home": "Australia",
+    "away": "Turquía",
+    "result": "2-0",
+    "status": "FINAL",
+    "group": "Grupo D",
+    "bets": [
+      "1-2",
+      "1-2",
+      "1-2",
+      "0-3",
+      "1-1",
+      "1-2",
+      "1-2",
+      "0-1"
+    ],
+    "pts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "date": "14 Jun",
+    "home": "Alemania",
+    "away": "Curazao",
+    "result": "7-1",
+    "status": "FINAL",
+    "group": "Grupo E",
+    "bets": [
+      "5-0",
+      "3-0",
+      "3-0",
+      "5-0",
+      "4-0",
+      "4-0",
+      "2-0",
+      "4-0"
+    ],
+    "pts": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "date": "14 Jun",
+    "home": "Países Bajos",
+    "away": "Japón",
+    "result": "0-0",
+    "status": "23'",
+    "group": "Grupo F",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+]
