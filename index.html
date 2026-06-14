@@ -5,271 +5,210 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>La Polla de Ulloa — Mundial 2026</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f2; color: #1a1a18; padding: 1.5rem 1rem; max-width: 960px; margin: 0 auto; }
-h1 { font-size: 20px; font-weight: 600; margin-bottom: 0.15rem; }
-.subtitle { font-size: 13px; color: #888780; margin-bottom: 1.25rem; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f2;color:#1a1a18;padding:1.5rem 1rem;max-width:900px;margin:0 auto}
+h1{font-size:20px;font-weight:600;margin-bottom:.15rem}
+.sub{font-size:13px;color:#888780;margin-bottom:1.25rem}
+.tabs{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap}
+.tab{padding:7px 16px;border:.5px solid #b4b2a9;border-radius:8px;font-size:13px;cursor:pointer;background:transparent;color:#5f5e5a;font-family:inherit}
+.tab.active{background:#1a1a18;color:#fff;font-weight:500;border-color:#1a1a18}
+.section{display:none}.section.active{display:block}
 
-/* TABS */
-.tabs { display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
-.tab { padding: 7px 16px; border: 0.5px solid #b4b2a9; border-radius: 8px; font-size: 13px; cursor: pointer; background: transparent; color: #5f5e5a; font-family: inherit; }
-.tab.active { background: #1a1a18; color: #fff; font-weight: 500; border-color: #1a1a18; }
-.section { display: none; }
-.section.active { display: block; }
-
-/* MATCH ACTUAL */
-.match-hero { background: #fff; border: 2px solid #85B7EB; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
-.match-tag { font-size: 11px; font-weight: 600; color: #185FA5; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px; margin-bottom: 0.6rem; }
-.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #27B07C; }
-.match-title { font-size: 17px; font-weight: 700; margin-bottom: 0.3rem; }
-.match-meta { font-size: 12px; color: #888780; margin-bottom: 1rem; }
-.score-big { font-size: 32px; font-weight: 700; color: #185FA5; margin-bottom: 0.25rem; }
-.score-label { font-size: 11px; color: #888780; margin-bottom: 1.25rem; }
-.bets-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-.bet-chip { display: flex; flex-direction: column; align-items: center; background: #f1efe8; border-radius: 10px; padding: 8px 12px; min-width: 80px; flex: 1; }
-.bet-chip.you { background: #EBF4FD; border: 1.5px solid #85B7EB; }
-.bet-chip .name { font-size: 10px; color: #888780; margin-bottom: 3px; white-space: nowrap; }
-.bet-chip.you .name { color: #185FA5; }
-.bet-chip .apuesta { font-size: 15px; font-weight: 700; }
-.bet-chip.you .apuesta { color: #185FA5; }
-.bet-chip .pts-chip { margin-top: 4px; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 999px; }
-.pts-exact { background: #9FE1CB; color: #085041; }
-.pts-ok    { background: #C0DD97; color: #27500A; }
-.pts-zero  { background: #F1EFE8; color: #5F5E5A; }
-.pts-pending { background: #B5D4F4; color: #0C447C; }
+/* MATCH HERO */
+.hero{background:#fff;border:2px solid #85B7EB;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1rem}
+.hero-tag{font-size:11px;font-weight:600;color:#185FA5;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;margin-bottom:.6rem}
+.dot{width:7px;height:7px;border-radius:50%;background:#27B07C}
+.hero-title{font-size:18px;font-weight:700;margin-bottom:.2rem}
+.hero-meta{font-size:12px;color:#888780;margin-bottom:.9rem}
+.score{font-size:34px;font-weight:700;color:#185FA5;margin-bottom:.15rem}
+.score-lbl{font-size:11px;color:#888780;margin-bottom:1.1rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;flex-direction:column;align-items:center;background:#f1efe8;border-radius:10px;padding:8px 12px;min-width:78px;flex:1}
+.chip.you{background:#EBF4FD;border:1.5px solid #85B7EB}
+.chip .cn{font-size:10px;color:#888780;margin-bottom:3px;white-space:nowrap}
+.chip.you .cn{color:#185FA5}
+.chip .ca{font-size:15px;font-weight:700}
+.chip.you .ca{color:#185FA5}
+.chip .cp{margin-top:4px;font-size:10px;font-weight:600;padding:1px 7px;border-radius:999px}
+.pe{background:#9FE1CB;color:#085041}
+.po{background:#C0DD97;color:#27500A}
+.pz{background:#F1EFE8;color:#5F5E5A}
+.pp{background:#B5D4F4;color:#0C447C}
 
 /* RANKING */
-.rank-rows { display: flex; flex-direction: column; gap: 8px; }
-.rank-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; }
-.rank-num { font-size: 18px; font-weight: 600; width: 28px; text-align: center; }
-.bar-wrap { flex: 1; background: #f1efe8; border-radius: 4px; height: 9px; overflow: hidden; min-width: 50px; }
-.bar { height: 100%; border-radius: 4px; }
-.you-row { background: #EBF4FD !important; border: 1.5px solid #85B7EB !important; }
-
-/* BADGE */
-.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
-.b-gold   { background:#FAC775; color:#633806; }
-.b-silver { background:#D3D1C7; color:#2C2C2A; }
-.b-gray   { background:#F1EFE8; color:#5F5E5A; }
-.b-exact  { background:#9FE1CB; color:#085041; }
-.b-ok     { background:#C0DD97; color:#27500A; }
-.b-zero   { background:#F1EFE8; color:#5F5E5A; }
-.b-you    { background:#B5D4F4; color:#0C447C; }
+.rrows{display:flex;flex-direction:column;gap:8px}
+.rrow{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fff;border:.5px solid #d3d1c7;border-radius:12px}
+.rnum{font-size:18px;font-weight:600;width:28px;text-align:center}
+.bar-w{flex:1;background:#f1efe8;border-radius:4px;height:9px;overflow:hidden;min-width:50px}
+.bar{height:100%;border-radius:4px}
+.you-row{background:#EBF4FD!important;border:1.5px solid #85B7EB!important}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600}
+.bg{background:#FAC775;color:#633806}
+.bs{background:#D3D1C7;color:#2C2C2A}
+.bx{background:#F1EFE8;color:#5F5E5A}
+.be{background:#9FE1CB;color:#085041}
+.bo{background:#C0DD97;color:#27500A}
+.bz{background:#F1EFE8;color:#5F5E5A}
+.by{background:#B5D4F4;color:#0C447C}
 
 /* TABLE */
-.overflow { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { font-weight: 500; font-size: 11px; color: #888780; padding: 8px 8px; text-align: center; border-bottom: 0.5px solid #e8e7e3; white-space: nowrap; }
-th:first-child { text-align: left; }
-td { padding: 7px 8px; border-bottom: 0.5px solid #e8e7e3; color: #1a1a18; vertical-align: middle; text-align: center; }
-td:first-child { text-align: left; }
-tr:last-child td { border-bottom: none; }
-.res { display: inline-block; background: #f1efe8; border: 0.5px solid #b4b2a9; border-radius: 4px; padding: 1px 6px; font-size: 12px; font-weight: 500; }
-.note { font-size: 12px; color: #b4b2a9; margin-top: 1rem; }
-.legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 1rem; font-size: 12px; color: #888780; align-items: center; }
+.ov{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-weight:500;font-size:11px;color:#888780;padding:8px;text-align:center;border-bottom:.5px solid #e8e7e3;white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:7px 8px;border-bottom:.5px solid #e8e7e3;color:#1a1a18;vertical-align:middle;text-align:center}
+td:first-child{text-align:left}
+tr:last-child td{border-bottom:none}
+.res{display:inline-block;background:#f1efe8;border:.5px solid #b4b2a9;border-radius:4px;padding:1px 6px;font-size:12px;font-weight:500}
+.note{font-size:12px;color:#b4b2a9;margin-top:1rem}
+.leg{display:flex;gap:12px;flex-wrap:wrap;margin-top:1rem;font-size:12px;color:#888780;align-items:center}
 </style>
 </head>
 <body>
 
 <h1>⚽ La Polla de Ulloa</h1>
-<p class="subtitle">Copa Mundial 2026 · actualizado 14 jun</p>
+<p class="sub">Copa Mundial 2026 · actualizado 14 jun</p>
 
 <div class="tabs">
-  <button class="tab active" onclick="showTab('actual',this)">🔥 Match más actual</button>
-  <button class="tab" onclick="showTab('ranking',this)">🏆 Ranking</button>
-  <button class="tab" onclick="showTab('partidos',this)">📋 Historial</button>
+  <button class="tab active" onclick="show('actual',this)">🔥 Último partido</button>
+  <button class="tab" onclick="show('ranking',this)">🏆 Ranking</button>
+  <button class="tab" onclick="show('partidos',this)">📋 Historial</button>
 </div>
 
-<!-- MATCH MÁS ACTUAL -->
+<!-- ÚLTIMO PARTIDO -->
 <div id="actual" class="section active">
-  <div class="match-hero">
-    <div class="match-tag"><span class="live-dot"></span> Match más actual · ¡Báncatela!</div>
-    <div class="match-title">Alemania vs Curazao</div>
-    <div class="match-meta">14 jun · Grupo E · NRG Stadium, Houston</div>
-    <div class="score-big">3 – 1</div>
-    <div class="score-label">Resultado final</div>
-    <div class="bets-grid">
-      <div class="bet-chip">
-        <span class="name">I.Bastías</span>
-        <span class="apuesta">5-0</span>
-        <span class="pts-chip pts-ok">+1 pt</span>
-      </div>
-      <div class="bet-chip">
-        <span class="name">N.Zarges</span>
-        <span class="apuesta">3-0</span>
-        <span class="pts-chip pts-ok">+1 pt</span>
-      </div>
-      <div class="bet-chip">
-        <span class="name">K.Sepúlveda</span>
-        <span class="apuesta">3-0</span>
-        <span class="pts-chip pts-ok">+1 pt</span>
-      </div>
-      <div class="bet-chip">
-        <span class="name">I.Ulloa</span>
-        <span class="apuesta">5-0</span>
-        <span class="pts-chip pts-ok">+1 pt</span>
-      </div>
-      <div class="bet-chip">
-        <span class="name">D.Mediano</span>
-        <span class="apuesta">4-0</span>
-        <span class="pts-chip pts-ok">+1 pt</span>
-      </div>
-      <div class="bet-chip">
-        <span class="name">H.Calderon</span>
-        <span class="apuesta">4-0</span>
-        <span class="pts-chip pts-ok">+1 pt</span>
-      </div>
-      <div class="bet-chip">
-        <span class="name">🌸 A.Fernandez</span>
-        <span class="apuesta">2-0</span>
-        <span class="pts-chip pts-ok">+1 pt</span>
-      </div>
-      <div class="bet-chip">
-        <span class="name">R.Lamas</span>
-        <span class="apuesta">4-0</span>
-        <span class="pts-chip pts-ok">+1 pt</span>
-      </div>
+  <div class="hero">
+    <div class="hero-tag"><span class="dot"></span>Último partido jugado</div>
+    <div class="hero-title">Alemania vs Curazao</div>
+    <div class="hero-meta">14 jun · Grupo E · NRG Stadium, Houston</div>
+    <div class="score">3 – 1</div>
+    <div class="score-lbl">Resultado final</div>
+    <div class="chips">
+      <div class="chip"><span class="cn">I.Bastías</span><span class="ca">5-0</span><span class="cp po">+1 pt</span></div>
+      <div class="chip"><span class="cn">N.Zarges</span><span class="ca">3-0</span><span class="cp po">+1 pt</span></div>
+      <div class="chip"><span class="cn">K.Sepúlveda</span><span class="ca">3-0</span><span class="cp po">+1 pt</span></div>
+      <div class="chip"><span class="cn">I.Ulloa</span><span class="ca">5-0</span><span class="cp po">+1 pt</span></div>
+      <div class="chip"><span class="cn">D.Mediano</span><span class="ca">4-0</span><span class="cp po">+1 pt</span></div>
+      <div class="chip you"><span class="cn">H.Calderon</span><span class="ca">4-0</span><span class="cp po">+1 pt</span></div>
+      <div class="chip"><span class="cn">🌸 A.Fernandez</span><span class="ca">2-0</span><span class="cp po">+1 pt</span></div>
+      <div class="chip"><span class="cn">R.Lamas</span><span class="ca">4-0</span><span class="cp po">+1 pt</span></div>
     </div>
-    <p style="font-size:12px;color:#888780;margin-top:1rem;">
-      Nadie acertó el marcador exacto (3-1) · todos apostaron a Alemania ganando → <strong>+1 pt para todos</strong>
-    </p>
+    <p style="font-size:12px;color:#888780;margin-top:1rem;">Nadie acertó el marcador exacto (3-1) · todos apostaron a Alemania → <strong>+1 pt para todos</strong></p>
   </div>
 </div>
 
 <!-- RANKING -->
 <div id="ranking" class="section">
-  <div class="rank-rows">
-    <div class="rank-row">
-      <span class="rank-num" style="color:#B8860B;">1</span>
-      <span style="flex:1;font-weight:500;">Ignacio Bastías</span>
-      <span style="font-size:13px;color:#888780;margin-right:8px;">8 pts</span>
-      <div class="bar-wrap"><div class="bar" style="width:100%;background:#9FE1CB;"></div></div>
-      <span class="badge b-gold">1°</span>
+  <div class="rrows">
+    <div class="rrow">
+      <span class="rnum" style="color:#B8860B">1</span>
+      <span style="flex:1;font-weight:500">Ignacio Bastías</span>
+      <span style="font-size:13px;color:#888780;margin-right:8px">9 pts</span>
+      <div class="bar-w"><div class="bar" style="width:100%;background:#9FE1CB"></div></div>
+      <span class="badge bg">1°</span>
     </div>
-    <div class="rank-row">
-      <span class="rank-num" style="color:#888;">2</span>
-      <span style="flex:1;font-weight:500;">Nicolas Zarges</span>
-      <span style="font-size:13px;color:#888780;margin-right:8px;">7 pts</span>
-      <div class="bar-wrap"><div class="bar" style="width:87.5%;background:#C0DD97;"></div></div>
-      <span class="badge b-silver">2°</span>
+    <div class="rrow">
+      <span class="rnum" style="color:#888">2</span>
+      <span style="flex:1;font-weight:500">Nicolas Zarges</span>
+      <span style="font-size:13px;color:#888780;margin-right:8px">8 pts</span>
+      <div class="bar-w"><div class="bar" style="width:88%;background:#C0DD97"></div></div>
+      <span class="badge bs">2°</span>
     </div>
-    <div class="rank-row">
-      <span class="rank-num" style="color:#888;">2</span>
-      <span style="flex:1;font-weight:500;">Kike Sepúlveda</span>
-      <span style="font-size:13px;color:#888780;margin-right:8px;">7 pts</span>
-      <div class="bar-wrap"><div class="bar" style="width:87.5%;background:#C0DD97;"></div></div>
-      <span class="badge b-silver">2°</span>
+    <div class="rrow">
+      <span class="rnum" style="color:#888">2</span>
+      <span style="flex:1;font-weight:500">Kike Sepúlveda</span>
+      <span style="font-size:13px;color:#888780;margin-right:8px">8 pts</span>
+      <div class="bar-w"><div class="bar" style="width:88%;background:#C0DD97"></div></div>
+      <span class="badge bs">2°</span>
     </div>
-    <div class="rank-row">
-      <span class="rank-num" style="color:#888;">3</span>
-      <span style="flex:1;font-weight:500;">Ignacio Ulloa</span>
-      <span style="font-size:13px;color:#888780;margin-right:8px;">5 pts</span>
-      <div class="bar-wrap"><div class="bar" style="width:62.5%;background:#D3D1C7;"></div></div>
-      <span class="badge b-gray">3°</span>
+    <div class="rrow">
+      <span class="rnum" style="color:#888">3</span>
+      <span style="flex:1;font-weight:500">Ignacio Ulloa</span>
+      <span style="font-size:13px;color:#888780;margin-right:8px">6 pts</span>
+      <div class="bar-w"><div class="bar" style="width:66%;background:#D3D1C7"></div></div>
+      <span class="badge bx">3°</span>
     </div>
-    <div class="rank-row">
-      <span class="rank-num" style="color:#888;">3</span>
-      <span style="flex:1;font-weight:500;">Diego Mediano</span>
-      <span style="font-size:13px;color:#888780;margin-right:8px;">5 pts</span>
-      <div class="bar-wrap"><div class="bar" style="width:62.5%;background:#D3D1C7;"></div></div>
-      <span class="badge b-gray">3°</span>
+    <div class="rrow">
+      <span class="rnum" style="color:#888">3</span>
+      <span style="flex:1;font-weight:500">Diego Mediano</span>
+      <span style="font-size:13px;color:#888780;margin-right:8px">6 pts</span>
+      <div class="bar-w"><div class="bar" style="width:66%;background:#D3D1C7"></div></div>
+      <span class="badge bx">3°</span>
     </div>
-    <div class="rank-row">
-      <span class="rank-num" style="color:#888;">3</span>
-      <span style="flex:1;font-weight:500;">Héctor Calderon</span>
-      <span style="font-size:13px;color:#888780;margin-right:8px;">5 pts</span>
-      <div class="bar-wrap"><div class="bar" style="width:62.5%;background:#D3D1C7;"></div></div>
-      <span class="badge b-gray">3°</span>
+    <div class="rrow you-row">
+      <span class="rnum" style="color:#185FA5">3</span>
+      <span style="flex:1;font-weight:500;color:#185FA5">Héctor Calderon <span style="font-size:10px;background:#B5D4F4;color:#0C447C;padding:1px 6px;border-radius:4px;margin-left:4px">tú</span></span>
+      <span style="font-size:13px;color:#888780;margin-right:8px">6 pts</span>
+      <div class="bar-w"><div class="bar" style="width:66%;background:#85B7EB"></div></div>
+      <span class="badge by">3°</span>
     </div>
-    <div class="rank-row">
-      <span class="rank-num" style="color:#888;">4</span>
-      <span style="flex:1;font-weight:500;">🌸 Alejandro Fernandez</span>
-      <span style="font-size:13px;color:#888780;margin-right:8px;">4 pts</span>
-      <div class="bar-wrap"><div class="bar" style="width:50%;background:#D3D1C7;"></div></div>
-      <span class="badge b-gray">4°</span>
+    <div class="rrow">
+      <span class="rnum" style="color:#888">4</span>
+      <span style="flex:1;font-weight:500">🌸 Alejandro Fernandez</span>
+      <span style="font-size:13px;color:#888780;margin-right:8px">5 pts</span>
+      <div class="bar-w"><div class="bar" style="width:55%;background:#D3D1C7"></div></div>
+      <span class="badge bx">4°</span>
     </div>
-    <div class="rank-row">
-      <span class="rank-num" style="color:#888;">5</span>
-      <span style="flex:1;font-weight:500;">Rene Lamas</span>
-      <span style="font-size:13px;color:#888780;margin-right:8px;">3 pts</span>
-      <div class="bar-wrap"><div class="bar" style="width:37.5%;background:#D3D1C7;"></div></div>
-      <span class="badge b-gray">5°</span>
+    <div class="rrow">
+      <span class="rnum" style="color:#888">5</span>
+      <span style="flex:1;font-weight:500">Rene Lamas</span>
+      <span style="font-size:13px;color:#888780;margin-right:8px">4 pts</span>
+      <div class="bar-w"><div class="bar" style="width:44%;background:#D3D1C7"></div></div>
+      <span class="badge bx">5°</span>
     </div>
   </div>
-  <p class="note" style="margin-top:1rem;">Puntos hasta antes de Alemania vs Curazao · acierto exacto = 3 pts · ganador correcto = 1 pt</p>
+  <p class="note">Incluye Alemania vs Curazao · exacto=3pts · ganador=1pt</p>
 </div>
 
 <!-- HISTORIAL -->
 <div id="partidos" class="section">
-  <div class="overflow">
+  <div class="ov">
   <table>
     <thead>
       <tr>
-        <th>Partido</th>
-        <th>Res.</th>
-        <th>I.Bastías</th>
-        <th>N.Zarges</th>
-        <th>K.Sepúlveda</th>
-        <th>I.Ulloa</th>
-        <th>D.Mediano</th>
-        <th>H.Calderon</th>
-        <th>🌸 A.Fernandez</th>
-        <th>R.Lamas</th>
+        <th>Partido</th><th>Res.</th>
+        <th>I.Bastías</th><th>N.Zarges</th><th>K.Sepúlveda</th>
+        <th>I.Ulloa</th><th>D.Mediano</th><th>★ H.Calderon</th>
+        <th>🌸 A.Fernandez</th><th>R.Lamas</th>
       </tr>
     </thead>
-    <tbody id="matchBody"></tbody>
+    <tbody id="tb"></tbody>
   </table>
   </div>
-  <div class="legend">
-    <span><span class="badge b-exact">3</span> exacto</span>
-    <span><span class="badge b-ok">1</span> ganador ok</span>
-    <span><span class="badge b-zero">0</span> fallo</span>
-    <span style="color:#b4b2a9;">★ = tú</span>
+  <div class="leg">
+    <span><span class="badge be">3</span> exacto</span>
+    <span><span class="badge bo">1</span> ganador ok</span>
+    <span><span class="badge bz">0</span> fallo</span>
+    <span style="color:#b4b2a9">★ = tú</span>
   </div>
 </div>
 
 <script>
-const matches = [
-  { date:'11 Jun', home:'México', away:'S.Africa', result:'2-0',
-    bets:['2-0','2-0','2-0','2-1','2-0','2-1','2-0','1-0'], pts:[3,3,3,1,3,1,3,1] },
-  { date:'11 Jun', home:'Corea del Sur', away:'Czech Rep.', result:'2-1',
-    bets:['2-1','1-1','1-1','0-2','1-1','1-0','1-1','1-1'], pts:[3,0,0,0,0,1,0,0] },
-  { date:'12 Jun', home:'Canada', away:'Bosnia', result:'1-1',
-    bets:['2-1','1-1','2-1','2-1','2-1','2-1','1-0','1-0'], pts:[0,3,0,0,0,0,0,0] },
-  { date:'12 Jun', home:'EEUU', away:'Paraguay', result:'4-1',
-    bets:['2-1','0-1','1-0','0-1','2-0','1-2','1-1','2-1'], pts:[1,0,1,0,1,0,0,1] },
-  { date:'13 Jun', home:'Qatar', away:'Suiza', result:'1-1',
-    bets:['0-3','0-2','0-2','0-3','0-2','—','0-2','0-2'], pts:[0,0,0,0,0,0,0,0] },
-  { date:'13 Jun', home:'Brasil', away:'Marruecos', result:'1-1',
-    bets:['2-1','2-1','2-1','1-1','2-0','3-1','1-0','2-1'], pts:[0,0,0,3,0,0,0,0] },
-  { date:'13 Jun', home:'Haiti', away:'Escocia', result:'0-1',
-    bets:['0-3','0-2','0-1','0-2','0-2','0-1','0-2','0-2'], pts:[1,1,3,1,1,3,1,1] },
-  { date:'14 Jun', home:'Australia', away:'Turquía', result:'2-0',
-    bets:['1-2','1-2','1-2','0-3','1-1','1-2','1-2','0-1'], pts:[0,0,0,0,0,0,0,0] },
-  { date:'14 Jun', home:'Alemania', away:'Curazao', result:'3-1',
-    bets:['5-0','3-0','3-0','5-0','4-0','4-0','2-0','4-0'], pts:[1,1,1,1,1,1,1,1] },
+const M=[
+  {d:'11 Jun',h:'México',a:'S.Africa',r:'2-0',b:['2-0','2-0','2-0','2-1','2-0','2-1','2-0','1-0'],p:[3,3,3,1,3,1,3,1]},
+  {d:'11 Jun',h:'Corea del Sur',a:'Czech Rep.',r:'2-1',b:['2-1','1-1','1-1','0-2','1-1','1-0','1-1','1-1'],p:[3,0,0,0,0,1,0,0]},
+  {d:'12 Jun',h:'Canadá',a:'Bosnia',r:'1-1',b:['2-1','1-1','2-1','2-1','2-1','2-1','1-0','1-0'],p:[0,3,0,0,0,0,0,0]},
+  {d:'12 Jun',h:'EEUU',a:'Paraguay',r:'4-1',b:['2-1','0-1','1-0','0-1','2-0','1-2','1-1','2-1'],p:[1,0,1,0,1,0,0,1]},
+  {d:'13 Jun',h:'Qatar',a:'Suiza',r:'1-1',b:['0-3','0-2','0-2','0-3','0-2','—','0-2','0-2'],p:[0,0,0,0,0,0,0,0]},
+  {d:'13 Jun',h:'Brasil',a:'Marruecos',r:'1-1',b:['2-1','2-1','2-1','1-1','2-0','3-1','1-0','2-1'],p:[0,0,0,3,0,0,0,0]},
+  {d:'13 Jun',h:'Haití',a:'Escocia',r:'0-1',b:['0-3','0-2','0-1','0-2','0-2','0-1','0-2','0-2'],p:[1,1,3,1,1,3,1,1]},
+  {d:'14 Jun',h:'Australia',a:'Turquía',r:'2-0',b:['1-2','1-2','1-2','0-3','1-1','1-2','1-2','0-1'],p:[0,0,0,0,0,0,0,0]},
+  {d:'14 Jun',h:'Alemania',a:'Curazao',r:'3-1',b:['5-0','3-0','3-0','5-0','4-0','4-0','2-0','4-0'],p:[1,1,1,1,1,1,1,1]},
 ];
-
-function cell(p, bet) {
-  if (bet === '—') return '<td style="color:#b4b2a9;">—</td>';
-  const cls = p===3 ? 'b-exact' : p===1 ? 'b-ok' : 'b-zero';
-  return `<td><span class="badge ${cls}">${p}</span><div style="font-size:10px;color:#888780;margin-top:1px;">${bet}</div></td>`;
+function cell(p,b){
+  if(!b||b==='—') return '<td style="color:#b4b2a9">—</td>';
+  const c=p===3?'be':p===1?'bo':'bz';
+  return `<td><span class="badge ${c}">${p}</span><div style="font-size:10px;color:#888780;margin-top:1px">${b}</div></td>`;
 }
-
-const body = document.getElementById('matchBody');
-matches.forEach(m => {
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td><span style="font-size:10px;color:#888780;">${m.date}</span><br><strong>${m.home}</strong> vs ${m.away}</td>
-    <td><span class="res">${m.result}</span></td>
-    ${m.bets.map((b,i) => cell(m.pts[i], b)).join('')}
-  `;
-  body.appendChild(tr);
+const tb=document.getElementById('tb');
+M.forEach(m=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><span style="font-size:10px;color:#888780">${m.d}</span><br><strong>${m.h}</strong> vs ${m.a}</td><td><span class="res">${m.r}</span></td>${m.b.map((b,i)=>cell(m.p[i],b)).join('')}`;
+  tb.appendChild(tr);
 });
-
-function showTab(id, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+function show(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   el.classList.add('active');
 }
