@@ -71,10 +71,15 @@ async def scrape_fifa():
         browser = await pw.chromium.launch(args=["--no-sandbox"])
         page = await browser.new_page(locale="es-ES")
         print(f"Cargando FIFA...", flush=True)
-        await page.goto(FIFA_URL, wait_until="networkidle", timeout=60000)
-        await page.wait_for_timeout(4000)
-        # Refrescar para obtener datos actualizados
-        await page.reload(wait_until="networkidle", timeout=60000)
+        await page.goto(FIFA_URL, wait_until="domcontentloaded", timeout=120000)
+        # Esperar a que aparezca texto de resultado (FINAL o hora tipo 20:00)
+        try:
+            await page.wait_for_function(
+                "document.body.innerText.includes('FINAL') || document.body.innerText.length > 5000",
+                timeout=90000
+            )
+        except Exception:
+            pass
         await page.wait_for_timeout(3000)
 
         full = await page.evaluate("document.body.innerText")

@@ -2,7 +2,7 @@ name: Actualizar polla
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # cada 5 min (mínimo de GitHub Actions)
+    - cron: '*/5 * * * *'   # cada 5 min (mínimo de GitHub Actions)
   workflow_dispatch:
 
 permissions:
@@ -11,6 +11,7 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -28,14 +29,16 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           for i in 1 2 3 4 5; do
-            echo "=== Iteración $i ==="
-            python scraper.py || true
-            git add index.html scraped_data.json 2>/dev/null || true
-            if ! git diff --cached --quiet; then
-              git commit -m "🤖 Auto-update iter $i $(date -u '+%H:%M UTC')"
-              git push
-            else
-              echo "Sin cambios en iteración $i"
-            fi
+            echo "=== Iteración $i ($(date -u '+%H:%M:%S UTC')) ==="
+            python scraper.py && {
+              git add index.html scraped_data.json 2>/dev/null || true
+              if ! git diff --cached --quiet; then
+                git commit -m "🤖 Auto-update $i/5 $(date -u '+%H:%M UTC')"
+                git push
+                echo "✓ Pushed iteración $i"
+              else
+                echo "Sin cambios en iteración $i"
+              fi
+            } || echo "⚠️ Scraper falló en iteración $i, continuando..."
             [ $i -lt 5 ] && sleep 60
           done
