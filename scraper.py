@@ -13,16 +13,28 @@ FIFA_URL = "https://www.fifa.com/es/tournaments/mens/worldcup/canadamexicousa202
 PLAYERS = ["I.Bastías","N.Zarges","K.Sepúlveda","I.Ulloa","D.Mediano","H.Calderon","🌸 A.Fernandez","R.Lamas"]
 YOU = "H.Calderon"
 
+# Pronósticos reales scrapeados de pollamundialera.com (14 jun 2026)
+# Orden: [Bastías, Zarges, Kike, Ulloa, Mediano, Calderon, Fernandez, Lamas]
 BETS = {
-    "México vs Sudáfrica":            ["2-0","2-0","2-0","2-1","2-0","2-1","2-0","1-0"],
-    "República de Corea vs Chequia":  ["2-1","1-1","1-1","0-2","1-1","1-0","1-1","1-1"],
-    "Canadá vs Bosnia y Herzegovina": ["2-1","1-1","2-1","2-1","2-1","2-1","1-0","1-0"],
-    "EE. UU. vs Paraguay":            ["2-1","0-1","1-0","0-1","2-0","1-2","1-1","2-1"],
-    "Catar vs Suiza":                 ["0-3","0-2","0-2","0-3","0-2","—","0-2","0-2"],
-    "Brasil vs Marruecos":            ["2-1","2-1","2-1","1-1","2-0","3-1","1-0","2-1"],
-    "Haití vs Escocia":               ["0-3","0-2","0-1","0-2","0-2","0-1","0-2","0-2"],
-    "Australia vs Turquía":           ["1-2","1-2","1-2","0-3","1-1","1-2","1-2","0-1"],
-    "Alemania vs Curazao":            ["5-0","3-0","3-0","5-0","4-0","4-0","2-0","4-0"],
+    "México vs Sudáfrica":             ["2-0","2-0","2-0","2-1","2-0","2-1","2-0","1-0"],
+    "República de Corea vs Chequia":   ["2-1","1-1","1-1","0-2","1-1","1-0","1-1","1-1"],
+    "Canadá vs Bosnia y Herzegovina":  ["2-1","1-1","2-1","2-1","2-1","2-1","1-0","1-0"],
+    "EE. UU. vs Paraguay":             ["2-1","0-1","1-0","0-1","2-0","1-2","1-1","2-1"],
+    "Catar vs Suiza":                  ["0-3","0-2","0-2","0-3","0-2","—","0-2","0-2"],
+    "Brasil vs Marruecos":             ["2-1","2-1","2-1","1-1","2-0","3-1","1-0","2-1"],
+    "Haití vs Escocia":                ["0-3","0-2","0-1","0-2","0-2","0-1","0-2","0-2"],
+    "Australia vs Turquía":            ["1-2","1-2","1-2","0-3","1-1","1-2","1-2","0-1"],
+    "Alemania vs Curazao":             ["5-0","3-0","3-0","5-0","4-0","4-0","2-0","4-0"],
+    # Próximos partidos — se agregan cuando pollamundialera registre los pronósticos
+}
+
+# Normalización de nombres FIFA → nombres usados en display
+FIFA_NAME_MAP = {
+    "Sudáfrica": "Sudáfrica", "República de Corea": "Corea del Sur",
+    "Bosnia y Herzegovina": "Bosnia", "EE. UU.": "EEUU",
+    "Catar": "Qatar", "Haití": "Haití", "Países Bajos": "Holanda",
+    "Marfil": "Costa de Marfil", "Arabia Saudí": "Arabia Saudita",
+    "Cabo Verde": "Cape Verde", "Costa de Marfil": "Ivory Coast",
 }
 
 DATE_MAP = {
@@ -54,16 +66,20 @@ def calc_pts(result, bet):
         return 1
     return 0
 
+def normalize(name):
+    return FIFA_NAME_MAP.get(name, name)
+
 def find_bets(home, away):
-    key = f"{home} vs {away}"
-    if key in BETS:
-        return BETS[key]
-    # Buscar parcial
-    for k, v in BETS.items():
-        kh, ka = k.split(" vs ")
-        if kh[:4].lower() in home.lower() or home.lower()[:4] in kh.lower():
-            if ka[:4].lower() in away.lower() or away.lower()[:4] in ka.lower():
-                return v
+    # Intentar match directo
+    for key, v in BETS.items():
+        kh, ka = key.split(" vs ")
+        h, a = normalize(home), normalize(away)
+        if (kh.lower() in h.lower() or h.lower() in kh.lower()) and \
+           (ka.lower() in a.lower() or a.lower() in ka.lower()):
+            return v
+        # Match por primeras 4 letras
+        if kh[:4].lower() == h[:4].lower() and ka[:4].lower() == a[:4].lower():
+            return v
     return ["—"] * len(PLAYERS)
 
 async def scrape_fifa():
