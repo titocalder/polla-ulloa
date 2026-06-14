@@ -14,6 +14,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -42,3 +44,4 @@ jobs:
             } || echo "⚠️ Scraper falló en iteración $i, continuando..."
             [ $i -lt 5 ] && sleep 60
           done
+          exit 0
