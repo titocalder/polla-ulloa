@@ -2,8 +2,8 @@ name: Actualizar polla
 
 on:
   schedule:
-    - cron: '0 * * * *'   # cada hora
-  workflow_dispatch:        # también manual desde GitHub
+    - cron: '*/5 * * * *'  # cada 5 min (mínimo de GitHub Actions)
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -23,15 +23,19 @@ jobs:
           pip install playwright
           playwright install chromium --with-deps
 
-      - name: Ejecutar scraper
-        run: python scraper.py
-
-      - name: Commit y push si hay cambios
+      - name: Loop cada ~1 minuto (5 iteraciones)
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html scraped_data.json
-          git diff --cached --quiet && echo "Sin cambios" || (
-            git commit -m "🤖 Actualización automática $(date -u '+%Y-%m-%d %H:%M UTC')"
-            git push
-          )
+          for i in 1 2 3 4 5; do
+            echo "=== Iteración $i ==="
+            python scraper.py || true
+            git add index.html scraped_data.json 2>/dev/null || true
+            if ! git diff --cached --quiet; then
+              git commit -m "🤖 Auto-update iter $i $(date -u '+%H:%M UTC')"
+              git push
+            else
+              echo "Sin cambios en iteración $i"
+            fi
+            [ $i -lt 5 ] && sleep 60
+          done
