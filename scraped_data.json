@@ -278,5 +278,61 @@
       1,
       0
     ]
+  },
+  {
+    "date": "14 Jun",
+    "home": "Costa de Marfil",
+    "away": "Ecuador",
+    "result": "1-0",
+    "status": "FINAL",
+    "group": "Grupo E",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "15 Jun",
+    "home": "Suecia",
+    "away": "Túnez",
+    "result": "1-0",
+    "status": "13'",
+    "group": "Grupo F",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
