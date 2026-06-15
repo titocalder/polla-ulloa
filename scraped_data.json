@@ -362,5 +362,33 @@
       null,
       null
     ]
+  },
+  {
+    "date": "15 Jun",
+    "home": "Bélgica",
+    "away": "Egipto",
+    "result": "1-1",
+    "status": "FINAL",
+    "group": "Grupo G",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
