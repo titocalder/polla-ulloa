@@ -395,9 +395,37 @@
     "date": "15 Jun",
     "home": "Arabia Saudí",
     "away": "Uruguay",
-    "result": "1-0",
-    "status": "52'",
+    "result": "1-1",
+    "status": "FINAL",
     "group": "Grupo H",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "16 Jun",
+    "home": "RI de Irán",
+    "away": "Nueva Zelanda",
+    "result": "1-1",
+    "status": "43'",
+    "group": "Grupo G",
     "bets": [
       "—",
       "—",
