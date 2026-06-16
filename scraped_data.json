@@ -451,8 +451,36 @@
     "date": "16 Jun",
     "home": "Francia",
     "away": "Senegal",
+    "result": "3-1",
+    "status": "FINAL",
+    "group": "Grupo I",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "16 Jun",
+    "home": "Irak",
+    "away": "Noruega",
     "result": "0-0",
-    "status": "63'",
+    "status": "25'",
     "group": "Grupo I",
     "bets": [
       "—",
