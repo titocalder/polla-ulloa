@@ -479,9 +479,37 @@
     "date": "16 Jun",
     "home": "Irak",
     "away": "Noruega",
-    "result": "1-3",
-    "status": "90'+5'",
+    "result": "1-4",
+    "status": "FINAL",
     "group": "Grupo I",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "17 Jun",
+    "home": "Argentina",
+    "away": "Argelia",
+    "result": "1-0",
+    "status": "46'",
+    "group": "Grupo J",
     "bets": [
       "—",
       "—",
