@@ -507,8 +507,36 @@
     "date": "17 Jun",
     "home": "Argentina",
     "away": "Argelia",
-    "result": "1-0",
-    "status": "51'",
+    "result": "3-0",
+    "status": "FINAL",
+    "group": "Grupo J",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "17 Jun",
+    "home": "Austria",
+    "away": "Jordania",
+    "result": "3-1",
+    "status": "FINAL",
     "group": "Grupo J",
     "bets": [
       "—",
