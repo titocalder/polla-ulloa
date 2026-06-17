@@ -564,8 +564,36 @@
     "home": "Portugal",
     "away": "RD Congo",
     "result": "1-1",
-    "status": "50'",
+    "status": "FINAL",
     "group": "Grupo K",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "17 Jun",
+    "home": "Inglaterra",
+    "away": "Croacia",
+    "result": "1-0",
+    "status": "29'",
+    "group": "Grupo L",
     "bets": [
       "—",
       "—",
