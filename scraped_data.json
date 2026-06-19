@@ -731,9 +731,37 @@
     "date": "18 Jun",
     "home": "Canadá",
     "away": "Catar",
-    "result": "4-0",
-    "status": "68'",
+    "result": "6-0",
+    "status": "FINAL",
     "group": "Grupo B",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "19 Jun",
+    "home": "México",
+    "away": "República de Corea",
+    "result": "1-0",
+    "status": "54'",
+    "group": "Grupo A",
     "bets": [
       "—",
       "—",
