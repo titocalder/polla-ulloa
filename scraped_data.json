@@ -844,8 +844,36 @@
     "home": "Brasil",
     "away": "Haití",
     "result": "3-0",
-    "status": "60'",
+    "status": "FINAL",
     "group": "Grupo C",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "20 Jun",
+    "home": "Turquía",
+    "away": "Paraguay",
+    "result": "0-1",
+    "status": "FINAL",
+    "group": "Grupo D",
     "bets": [
       "—",
       "—",
