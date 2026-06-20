@@ -816,7 +816,35 @@
     "home": "Escocia",
     "away": "Marruecos",
     "result": "0-1",
-    "status": "86'",
+    "status": "FINAL",
+    "group": "Grupo C",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "20 Jun",
+    "home": "Brasil",
+    "away": "Haití",
+    "result": "3-0",
+    "status": "56'",
     "group": "Grupo C",
     "bets": [
       "—",
