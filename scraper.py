@@ -13,20 +13,44 @@ FIFA_URL = "https://www.fifa.com/es/tournaments/mens/worldcup/canadamexicousa202
 PLAYERS = ["I.Bastías","N.Zarges","K.Sepúlveda","I.Ulloa","D.Mediano","H.Calderon","🌸 A.Fernandez","R.Lamas"]
 YOU = "H.Calderon"
 
-# Pronósticos reales scrapeados de pollamundialera.com (14 jun 2026)
+# Pronósticos scrapeados de pollamundialera.com (20 jun 2026)
 # Orden: [Bastías, Zarges, Kike, Ulloa, Mediano, Calderon, Fernandez, Lamas]
 BETS = {
-    "México vs Sudáfrica":             ["2-0","2-0","2-0","2-1","2-0","2-1","2-0","1-0"],
-    "República de Corea vs Chequia":   ["2-1","1-1","1-1","0-2","1-1","1-0","1-1","1-1"],
-    "Canadá vs Bosnia y Herzegovina":  ["2-1","1-1","2-1","2-1","2-1","2-1","1-0","1-0"],
-    "EE. UU. vs Paraguay":             ["2-1","0-1","1-0","0-1","2-0","1-2","1-1","2-1"],
-    "Catar vs Suiza":                  ["0-3","0-2","0-2","0-3","0-2","—","0-2","0-2"],
-    "Brasil vs Marruecos":             ["2-1","2-1","2-1","1-1","2-0","3-1","1-0","2-1"],
-    "Haití vs Escocia":                ["0-3","0-2","0-1","0-2","0-2","0-1","0-2","0-2"],
-    "Australia vs Turquía":            ["1-2","1-2","1-2","0-3","1-1","1-2","1-2","0-1"],
-    "Alemania vs Curazao":             ["5-0","3-0","3-0","5-0","4-0","4-0","2-0","4-0"],
-    "Países Bajos vs Japón":           ["2-1","2-0","2-1","1-1","2-1","2-1","1-1","2-1"],
-    "Costa de Marfil vs Ecuador":      ["—","—","—","—","—","—","—","—"],
+    "México vs Sudáfrica":              ["2-0","2-0","2-0","2-1","2-0","2-1","2-0","1-0"],
+    "República de Corea vs Chequia":    ["2-1","1-1","1-1","0-2","1-1","1-0","1-1","1-1"],
+    "Canadá vs Bosnia y Herzegovina":   ["2-1","1-1","2-1","2-1","2-1","2-1","1-0","1-0"],
+    "EE. UU. vs Paraguay":              ["2-1","0-1","1-0","0-1","2-0","1-2","1-1","2-1"],
+    "Catar vs Suiza":                   ["0-3","0-2","0-2","0-3","0-2","—", "0-2","0-2"],
+    "Brasil vs Marruecos":              ["2-1","2-1","2-1","1-1","2-0","3-1","1-0","2-1"],
+    "Haití vs Escocia":                 ["0-3","0-2","0-1","0-2","0-2","0-1","0-2","0-2"],
+    "Australia vs Turquía":             ["1-2","1-2","1-2","0-3","1-1","1-2","1-2","0-1"],
+    "Alemania vs Curazao":              ["5-0","3-0","3-0","5-0","4-0","4-0","2-0","4-0"],
+    "Países Bajos vs Japón":            ["2-1","2-0","2-1","1-1","2-1","2-1","1-1","2-1"],
+    "Costa de Marfil vs Ecuador":       ["1-1","0-1","1-1","2-2","1-2","1-2","1-2","1-1"],
+    "Suecia vs Túnez":                  ["2-0","1-0","1-0","2-0","2-0","2-0","1-1","1-0"],
+    "Bélgica vs Egipto":                ["2-1","2-0","2-0","1-2","2-0","2-0","2-1","2-1"],
+    "España vs Islas de Cabo Verde":    ["3-0","3-0","3-0","4-0","3-0","3-0","3-0","5-0"],
+    "Arabia Saudí vs Uruguay":          ["1-2","0-2","0-2","0-2","0-2","0-2","0-2","0-2"],
+    "RI de Irán vs Nueva Zelanda":      ["0-2","2-0","1-0","1-2","1-0","1-0","1-0","2-0"],
+    "Francia vs Senegal":               ["2-0","2-0","2-1","3-1","2-0","2-0","2-0","2-1"],
+    "Irak vs Noruega":                  ["0-2","0-2","0-2","0-4","0-2","0-2","0-2","0-3"],
+    "Argentina vs Argelia":             ["3-0","2-0","2-0","3-1","3-0","2-0","2-0","2-0"],
+    "Austria vs Jordania":              ["3-0","2-0","2-0","2-2","2-0","1-0","1-0","1-0"],
+    "Portugal vs RD Congo":             ["4-0","3-0","2-0","—", "3-0","3-0","2-0","2-0"],
+    "Inglaterra vs Croacia":            ["2-1","2-1","2-1","2-2","2-0","1-1","2-1","2-1"],
+    "Ghana vs Panamá":                  ["1-1","1-0","1-1","4-0","2-1","2-0","1-1","2-1"],
+    "Uzbekistán vs Colombia":           ["0-3","0-2","1-2","1-2","0-2","1-2","0-2","1-3"],
+    "Chequia vs Sudáfrica":             ["2-1","1-0","—", "1-0","2-0","2-0","1-0","2-0"],
+    "Suiza vs Bosnia y Herzegovina":    ["1-1","2-1","2-0","0-0","2-0","2-1","1-0","2-1"],
+    "Canadá vs Catar":                  ["2-1","2-0","2-0","1-1","3-0","2-0","2-0","2-1"],
+    "México vs República de Corea":     ["2-1","2-1","1-1","2-1","2-1","2-1","1-1","1-1"],
+    "EE. UU. vs Australia":             ["2-1","2-0","2-1","1-1","2-1","2-0","2-1","3-1"],
+    "Escocia vs Marruecos":             ["0-2","0-2","1-2","1-3","1-1","1-2","0-1","1-2"],
+    "Brasil vs Haití":                  ["4-0","3-0","3-0","4-0","4-0","3-0","3-0","5-0"],
+    "Turquía vs Paraguay":              ["2-1","1-1","2-1","2-2","2-1","1-0","1-1","1-1"],
+    "Países Bajos vs Suecia":           ["2-1","2-1","2-1","—", "1-1","2-1","2-1","2-2"],
+    "Alemania vs Costa de Marfil":      ["3-1","2-0","2-1","3-2","2-1","2-1","2-0","2-0"],
+    "Ecuador vs Curazao":               ["2-0","3-0","2-0","3-0","3-0","2-0","2-0","3-0"],
 }
 
 # Normalización de nombres FIFA → nombres usados en display
