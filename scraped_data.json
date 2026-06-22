@@ -1124,8 +1124,36 @@
     "home": "Argentina",
     "away": "Austria",
     "result": "2-0",
-    "status": "90'+7'",
+    "status": "FINAL",
     "group": "Grupo J",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "22 Jun",
+    "home": "Francia",
+    "away": "Irak",
+    "result": "1-0",
+    "status": "30'",
+    "group": "Grupo I",
     "bets": [
       "—",
       "—",
