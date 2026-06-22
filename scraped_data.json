@@ -1068,8 +1068,36 @@
     "home": "Uruguay",
     "away": "Islas de Cabo Verde",
     "result": "2-2",
-    "status": "90'+8'",
+    "status": "FINAL",
     "group": "Grupo H",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "22 Jun",
+    "home": "Nueva Zelanda",
+    "away": "Egipto",
+    "result": "1-3",
+    "status": "FINAL",
+    "group": "Grupo G",
     "bets": [
       "—",
       "—",
