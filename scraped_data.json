@@ -1235,9 +1235,37 @@
     "date": "23 Jun",
     "home": "Portugal",
     "away": "Uzbekistán",
-    "result": "4-0",
-    "status": "60'",
+    "result": "5-0",
+    "status": "FINAL",
     "group": "Grupo K",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "23 Jun",
+    "home": "Inglaterra",
+    "away": "Ghana",
+    "result": "0-0",
+    "status": "26'",
+    "group": "Grupo L",
     "bets": [
       "—",
       "—",
