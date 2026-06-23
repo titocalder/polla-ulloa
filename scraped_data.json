@@ -1152,7 +1152,7 @@
     "home": "Francia",
     "away": "Irak",
     "result": "3-0",
-    "status": "66'",
+    "status": "FINAL",
     "group": "Grupo I",
     "bets": [
       "—",
@@ -1179,9 +1179,37 @@
     "date": "23 Jun",
     "home": "Noruega",
     "away": "Senegal",
-    "result": "0-0",
-    "status": "21'",
+    "result": "3-2",
+    "status": "FINAL",
     "group": "Grupo I",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "23 Jun",
+    "home": "Jordania",
+    "away": "Argelia",
+    "result": "1-1",
+    "status": "69'",
+    "group": "Grupo J",
     "bets": [
       "—",
       "—",
