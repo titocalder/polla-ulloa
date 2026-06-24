@@ -1342,5 +1342,61 @@
       null,
       null
     ]
+  },
+  {
+    "date": "24 Jun",
+    "home": "Suiza",
+    "away": "Canadá",
+    "result": "0-0",
+    "status": "21'",
+    "group": "Grupo B",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "24 Jun",
+    "home": "Bosnia y Herzegovina",
+    "away": "Catar",
+    "result": "0-0",
+    "status": "21'",
+    "group": "Grupo B",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
