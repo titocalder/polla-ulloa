@@ -1398,5 +1398,61 @@
       null,
       null
     ]
+  },
+  {
+    "date": "24 Jun",
+    "home": "Escocia",
+    "away": "Brasil",
+    "result": "0-1",
+    "status": "21'",
+    "group": "Grupo C",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "24 Jun",
+    "home": "Marruecos",
+    "away": "Haití",
+    "result": "0-1",
+    "status": "21'",
+    "group": "Grupo C",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
