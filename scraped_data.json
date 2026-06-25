@@ -1510,5 +1510,61 @@
       null,
       null
     ]
+  },
+  {
+    "date": "25 Jun",
+    "home": "Curazao",
+    "away": "Costa de Marfil",
+    "result": "0-1",
+    "status": "23'",
+    "group": "Grupo E",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "25 Jun",
+    "home": "Ecuador",
+    "away": "Alemania",
+    "result": "1-1",
+    "status": "25'",
+    "group": "Grupo E",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
