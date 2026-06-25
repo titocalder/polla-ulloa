@@ -1566,5 +1566,61 @@
       null,
       null
     ]
+  },
+  {
+    "date": "25 Jun",
+    "home": "Japón",
+    "away": "Suecia",
+    "result": "0-0",
+    "status": "15'",
+    "group": "Grupo F",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "25 Jun",
+    "home": "Túnez",
+    "away": "Países Bajos",
+    "result": "0-2",
+    "status": "15'",
+    "group": "Grupo F",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
