@@ -1404,7 +1404,7 @@
     "home": "Escocia",
     "away": "Brasil",
     "result": "0-3",
-    "status": "77'",
+    "status": "FINAL",
     "group": "Grupo C",
     "bets": [
       "—",
@@ -1431,9 +1431,65 @@
     "date": "24 Jun",
     "home": "Marruecos",
     "away": "Haití",
-    "result": "3-2",
-    "status": "78'",
+    "result": "4-2",
+    "status": "FINAL",
     "group": "Grupo C",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "25 Jun",
+    "home": "Chequia",
+    "away": "México",
+    "result": "0-0",
+    "status": "34'",
+    "group": "Grupo A",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "25 Jun",
+    "home": "Sudáfrica",
+    "away": "República de Corea",
+    "result": "0-0",
+    "status": "35'",
+    "group": "Grupo A",
     "bets": [
       "—",
       "—",
