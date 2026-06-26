@@ -1678,5 +1678,61 @@
       null,
       null
     ]
+  },
+  {
+    "date": "26 Jun",
+    "home": "Noruega",
+    "away": "Francia",
+    "result": "0-1",
+    "status": "11'",
+    "group": "Grupo I",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "26 Jun",
+    "home": "Senegal",
+    "away": "Irak",
+    "result": "1-0",
+    "status": "9'",
+    "group": "Grupo I",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
