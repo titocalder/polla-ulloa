@@ -1622,5 +1622,61 @@
       null,
       null
     ]
+  },
+  {
+    "date": "26 Jun",
+    "home": "Turquía",
+    "away": "EE. UU.",
+    "result": "3-2",
+    "status": "FINAL",
+    "group": "Grupo D",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "26 Jun",
+    "home": "Paraguay",
+    "away": "Australia",
+    "result": "0-0",
+    "status": "FINAL",
+    "group": "Grupo D",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
