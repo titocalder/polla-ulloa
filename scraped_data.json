@@ -1846,5 +1846,61 @@
       null,
       null
     ]
+  },
+  {
+    "date": "27 Jun",
+    "home": "Panamá",
+    "away": "Inglaterra",
+    "result": "0-0",
+    "status": "8'",
+    "group": "Grupo L",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "27 Jun",
+    "home": "Croacia",
+    "away": "Ghana",
+    "result": "0-0",
+    "status": "8'",
+    "group": "Grupo L",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
