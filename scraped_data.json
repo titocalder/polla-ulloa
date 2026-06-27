@@ -1740,7 +1740,7 @@
     "home": "Islas de Cabo Verde",
     "away": "Arabia Saudí",
     "result": "0-0",
-    "status": "22'",
+    "status": "FINAL",
     "group": "Grupo H",
     "bets": [
       "—",
@@ -1767,9 +1767,65 @@
     "date": "27 Jun",
     "home": "Uruguay",
     "away": "España",
-    "result": "0-0",
-    "status": "22'",
+    "result": "0-1",
+    "status": "FINAL",
     "group": "Grupo H",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "27 Jun",
+    "home": "Egipto",
+    "away": "RI de Irán",
+    "result": "1-1",
+    "status": "65'",
+    "group": "Grupo G",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "27 Jun",
+    "home": "Nueva Zelanda",
+    "away": "Bélgica",
+    "result": "0-3",
+    "status": "66'",
+    "group": "Grupo G",
     "bets": [
       "—",
       "—",
