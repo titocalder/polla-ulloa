@@ -1734,5 +1734,61 @@
       null,
       null
     ]
+  },
+  {
+    "date": "27 Jun",
+    "home": "Islas de Cabo Verde",
+    "away": "Arabia Saudí",
+    "result": "0-0",
+    "status": "17'",
+    "group": "Grupo H",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "27 Jun",
+    "home": "Uruguay",
+    "away": "España",
+    "result": "0-0",
+    "status": "17'",
+    "group": "Grupo H",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
