@@ -1902,5 +1902,61 @@
       null,
       null
     ]
+  },
+  {
+    "date": "27 Jun",
+    "home": "Colombia",
+    "away": "Portugal",
+    "result": "0-0",
+    "status": "45'+1'",
+    "group": "Grupo K",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "27 Jun",
+    "home": "RD Congo",
+    "away": "Uzbekistán",
+    "result": "0-1",
+    "status": "45'",
+    "group": "Grupo K",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
