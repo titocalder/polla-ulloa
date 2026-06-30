@@ -2098,5 +2098,33 @@
       null,
       null
     ]
+  },
+  {
+    "date": "30 Jun",
+    "home": "(2)",
+    "away": "(3)",
+    "result": "1-1",
+    "status": "FINAL",
+    "group": "",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
   }
 ]
