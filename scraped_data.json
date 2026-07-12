@@ -2748,7 +2748,35 @@
     "home": "Noruega",
     "away": "Inglaterra",
     "result": "1-2",
-    "status": "117'",
+    "status": "FINAL",
+    "group": "",
+    "bets": [
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—",
+      "—"
+    ],
+    "pts": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "date": "12 Jul",
+    "home": "Argentina",
+    "away": "Suiza",
+    "result": "0-0",
+    "status": "9'",
     "group": "",
     "bets": [
       "—",
